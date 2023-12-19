@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import ReactAudioPlayer from 'react-audio-player';
+
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
+
 import axios from 'axios';
 import './App.css';
 
@@ -134,7 +138,8 @@ function App() {
         {tracks.items.map( item => (
           <li className='album-track-li' key={ item.id }>
             {item.track_number}. { item.name }
-            <ReactAudioPlayer
+            <AudioPlayer
+              className='player'
               src={ item.preview_url }
               // autoPlay
               controls
@@ -144,6 +149,14 @@ function App() {
       </div>
     )
   }
+
+
+  // const Player = ( item ) => {
+  //   <AudioPlayer
+  //     src={ item.preview_url }
+  //     controls
+  //   />
+  // }
 
 
   return (
