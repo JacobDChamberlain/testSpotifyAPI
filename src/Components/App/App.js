@@ -13,6 +13,7 @@ function App() {
   const [ token, setToken ] = useState('');
   const [ searchKey, setSearchKey ] = useState('');
   const [ artists, setArtists ] = useState([]);
+  const [ album, setAlbum ] = useState({});
 
 
   useEffect( () => {
@@ -25,6 +26,20 @@ function App() {
       window.location.hash = '';
       window.localStorage.setItem( 'token', token );
     }
+
+
+    const fetchAlbumData = async () => {
+      const { data } = await axios.get( 'https://api.spotify.com/v1/albums/5s208wsEJfmf57Wn0gSeLk', {
+        headers: {
+          Authorization: `Bearer ${ token }`
+        }
+      } );
+
+      setAlbum( data );
+    }
+
+    fetchAlbumData()
+      .catch( console.error );
 
     setToken( token );
   }, [] );
@@ -65,6 +80,35 @@ function App() {
   };
 
 
+  const renderAlbum = () => {
+    console.log( 'album data: ', album );
+
+    return (
+      <div className='album-data-wrapper'>
+        <div className='album-info'>
+          Band: { album.artists[0].name } <br/>
+          Title: { album.name } <br/>
+          URL: { album.href } <br/>
+          Tracks: <ol className='album-tracklist'>
+            { album.tracks.items.map( item => (
+              <li key={ item.id }>
+                { item.name }
+                {/* <br/>{ item.preview_url } */}
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <ul className='album-data-keys'>
+          { Object.keys( album ).map( key => (
+            <li key={ key }>{ key }</li>
+          ) ) }
+        </ul>
+      </div>
+    )
+  }
+
+
   return (
     <div className="App">
       <header className='app-header'>
@@ -76,9 +120,11 @@ function App() {
       </header>
 
       <form onSubmit={ searchArtists }>
-        <input type='text' onChange={ e => setSearchKey( e.target.value ) } />
+        <input name='search-input' type='text' onChange={ e => setSearchKey( e.target.value ) } />
         <button type={'submit'}>Search</button>
       </form>
+
+      { album.name && renderAlbum() }
 
       { renderArtists() }
     </div>
