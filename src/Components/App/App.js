@@ -106,17 +106,18 @@ function App() {
           Band: { album.artists[0].name }<br/>
           Title: { album.name }<br/>
           Release Date: { album.release_date }<br/>
-          Images: { album.images.map( image => (
+          {/* Images: { album.images.map( image => (
             <img key={ image.url } src={ image.url } alt={ `${album.artists[0].name} images from Spotify` } />
-          ))}
+          ))}<br/> */}
+          Image: <img src={ album.images[1].url } alt={`${ album.name } album from Spotify.` } /><br/>
           URL: { album.href }<br/>
         </div>
 
-        <ul className='album-data-keys'>
+        {/* <ul className='album-data-keys'>
           { Object.keys( album ).map( key => (
             <li key={ key }>{ key }</li>
           ) ) }
-        </ul>
+        </ul> */}
       </div>
     )
   }
@@ -124,16 +125,20 @@ function App() {
 
   const renderTracks = () => {
     console.log( 'tracks: ', tracks )
-    return tracks.items.map( item => (
-      <li key={ item.id }>
-        { item.name }
-        <ReactAudioPlayer
-          src={ item.preview_url }
-          // autoPlay
-          controls
-        />
-      </li>
-    ))
+    return (
+      <div className='album-tracks-wrapper'>
+        {tracks.items.map( item => (
+          <li className='album-track-li' key={ item.id }>
+            {item.track_number}. { item.name }
+            <ReactAudioPlayer
+              src={ item.preview_url }
+              // autoPlay
+              controls
+            />
+          </li>
+        ))}
+      </div>
+    )
   }
 
 
