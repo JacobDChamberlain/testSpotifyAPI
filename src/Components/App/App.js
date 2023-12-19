@@ -64,3 +64,7 @@ export default App;
 
 // After that we store the token in a state variable with useState
 // as well as save the token in our local Storage.
+
+
+//* Consider making a useEffect to log into my account with my credentials
+//* to make this work on page load when Maldevera website is live.
