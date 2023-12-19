@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import './App.css';
 
 function App() {
@@ -6,10 +7,13 @@ function App() {
   const REDIRECT_URI = 'http://localhost:3000';
   const AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
   const RESPONSE_TYPE = 'token';
-
   const authenticationURL = `${ AUTH_ENDPOINT }?client_id=${ CLIENT_ID }&redirect_uri=${ REDIRECT_URI }&response_type=${ RESPONSE_TYPE }`;
 
+
   const [ token, setToken ] = useState('');
+  const [ searchKey, setSearchKey ] = useState('');
+  const [ artists, setArtists ] = useState([]);
+
 
   useEffect( () => {
     const hash = window.location.hash;
@@ -25,10 +29,29 @@ function App() {
     setToken( token );
   }, [] );
 
+
   const logout = () => {
     setToken('');
     window.localStorage.removeItem( 'token' );
   }
+
+
+  const searchArtists = async (e) => {
+    e.preventDefault();
+
+    const { data } = await axios.get( 'https://api.spotify.com/v1/search', {
+      headers: {
+        Authorization: `Bearer ${ token }`
+      },
+      params: {
+        q: searchKey,
+        type: 'artist'
+      }
+    } );
+
+    setArtists( data.artists.items );
+  }
+
 
   return (
     <div className="App">
@@ -39,6 +62,10 @@ function App() {
           : <button onClick={ logout }>Logout</button>
         }
       </header>
+      <form onSubmit={ searchArtists }>
+        <input type='text' onChange={ e => setSearchKey( e.target.value ) } />
+        <button type={'submit'}>Search</button>
+      </form>
     </div>
   );
 }
