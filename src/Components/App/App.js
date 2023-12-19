@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import ReactAudioPlayer from 'react-audio-player';
 import axios from 'axios';
 import './App.css';
 
@@ -9,11 +10,14 @@ function App() {
   const RESPONSE_TYPE = 'token';
   const authenticationURL = `${ AUTH_ENDPOINT }?client_id=${ CLIENT_ID }&redirect_uri=${ REDIRECT_URI }&response_type=${ RESPONSE_TYPE }`;
 
+  const albumId = '5s208wsEJfmf57Wn0gSeLk';
+
 
   const [ token, setToken ] = useState('');
   const [ searchKey, setSearchKey ] = useState('');
   const [ artists, setArtists ] = useState([]);
   const [ album, setAlbum ] = useState({});
+  const [ tracks, setTracks ] = useState([]);
 
 
   useEffect( () => {
@@ -29,7 +33,7 @@ function App() {
 
 
     const fetchAlbumData = async () => {
-      const { data } = await axios.get( 'https://api.spotify.com/v1/albums/5s208wsEJfmf57Wn0gSeLk', {
+      const { data } = await axios.get( `https://api.spotify.com/v1/albums/${ albumId }`, {
         headers: {
           Authorization: `Bearer ${ token }`
         }
@@ -38,7 +42,20 @@ function App() {
       setAlbum( data );
     }
 
+    const fetchAlbumTracks = async () => {
+      const { data } = await axios.get( `https://api.spotify.com/v1/albums/${ albumId }/tracks`, {
+        headers: {
+          Authorization: `Bearer ${ token }`
+        }
+      } );
+
+      setTracks( data );
+    }
+
     fetchAlbumData()
+      .catch( console.error );
+
+    fetchAlbumTracks()
       .catch( console.error );
 
     setToken( token );
@@ -81,7 +98,7 @@ function App() {
 
 
   const renderAlbum = () => {
-    console.log( 'album data: ', album );
+    // console.log( 'album data: ', album );
 
     return (
       <div className='album-data-wrapper'>
@@ -93,14 +110,6 @@ function App() {
             <img key={ image.url } src={ image.url } alt={ `${album.artists[0].name} images from Spotify` } />
           ))}
           URL: { album.href }<br/>
-          Tracks: <ol className='album-tracklist'>
-            { album.tracks.items.map( item => (
-              <li key={ item.id }>
-                { item.name }
-                {/* <br/>{ item.preview_url } */}
-              </li>
-            ))}
-          </ol>
         </div>
 
         <ul className='album-data-keys'>
@@ -110,6 +119,21 @@ function App() {
         </ul>
       </div>
     )
+  }
+
+
+  const renderTracks = () => {
+    console.log( 'tracks: ', tracks )
+    return tracks.items.map( item => (
+      <li key={ item.id }>
+        { item.name }
+        <ReactAudioPlayer
+          src={ item.preview_url }
+          // autoPlay
+          controls
+        />
+      </li>
+    ))
   }
 
 
@@ -129,6 +153,8 @@ function App() {
       </form>
 
       { album.name && renderAlbum() }
+
+      { tracks.items &&  renderTracks() }
 
       { renderArtists() }
     </div>
