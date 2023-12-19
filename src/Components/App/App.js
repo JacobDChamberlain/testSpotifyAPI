@@ -86,9 +86,13 @@ function App() {
     return (
       <div className='album-data-wrapper'>
         <div className='album-info'>
-          Band: { album.artists[0].name } <br/>
-          Title: { album.name } <br/>
-          URL: { album.href } <br/>
+          Band: { album.artists[0].name }<br/>
+          Title: { album.name }<br/>
+          Release Date: { album.release_date }<br/>
+          Images: { album.images.map( image => (
+            <img key={ image.url } src={ image.url } alt={ `${album.artists[0].name} images from Spotify` } />
+          ))}
+          URL: { album.href }<br/>
           Tracks: <ol className='album-tracklist'>
             { album.tracks.items.map( item => (
               <li key={ item.id }>
