@@ -53,6 +53,18 @@ function App() {
   }
 
 
+  const renderArtists = () => {
+    return artists.map( artist => (
+      <div className='artist-result' key={ artist.id }>
+        { artist.images.length ?
+          <img className='artist-result-image' width={'50%'} src={ artist.images[0].url } alt={ `Spotify artist images for ${ artist.name }.` } />
+          : <div>No Image</div> }
+        { artist.name }
+      </div>
+    ))
+  };
+
+
   return (
     <div className="App">
       <header className='app-header'>
@@ -62,10 +74,13 @@ function App() {
           : <button onClick={ logout }>Logout</button>
         }
       </header>
+
       <form onSubmit={ searchArtists }>
         <input type='text' onChange={ e => setSearchKey( e.target.value ) } />
         <button type={'submit'}>Search</button>
       </form>
+
+      { renderArtists() }
     </div>
   );
 }
@@ -95,3 +110,9 @@ export default App;
 
 //* Consider making a useEffect to log into my account with my credentials
 //* to make this work on page load when Maldevera website is live.
+
+
+// Fetch data using Axios with Bearer and token
+// Display info
+// ? Use the API Documentation to learn what all data I can retrieve!
+// * Learn how to get audio data to play songs!! :D! You can do it!
