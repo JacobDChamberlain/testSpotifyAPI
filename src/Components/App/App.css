@@ -21,12 +21,21 @@
 }
 
 
+.artists-data-wrapper {
+  display: flex;
+  /* flex-direction: column; */
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
 .artist-result {
   display: flex;
   flex-direction: column;
   text-align: center;
   align-items: center;
   padding: 5px;
+  height: 700px;
+  width: 700px;
 }
 
 .artist-result-image {

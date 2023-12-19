@@ -86,14 +86,18 @@ function App() {
 
 
   const renderArtists = () => {
-    return artists.map( artist => (
-      <div className='artist-result' key={ artist.id }>
-        { artist.images.length ?
-          <img className='artist-result-image' width={'50%'} src={ artist.images[0].url } alt={ `Spotify artist images for ${ artist.name }.` } />
-          : <div>No Image</div> }
-        { artist.name }
+    return (
+      <div className='artists-data-wrapper'>
+        {artists.map( artist => (
+          <div className='artist-result' key={ artist.id }>
+            { artist.images.length ?
+              <img className='artist-result-image' width={'50%'} src={ artist.images[0].url } alt={ `Spotify artist images for ${ artist.name }.` } />
+              : <div>No Image</div> }
+            { artist.name }
+          </div>
+        ))}
       </div>
-    ))
+    )
   };
 
 
