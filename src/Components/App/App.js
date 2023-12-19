@@ -50,7 +50,7 @@ function App() {
         }
       } );
 
-      setTracks( data );
+      setTracks( data.items );
     }
 
     fetchAlbumData()
@@ -129,15 +129,16 @@ function App() {
 
 
   const renderTracks = () => {
-    console.log( 'tracks: ', tracks )
+    // console.log( 'tracks: ', tracks )
+
     return (
       <div className='album-tracks-wrapper'>
-        {tracks.items.map( item => (
-          <li className='album-track-li' key={ item.id }>
-            {item.track_number}. { item.name }
+        {tracks.map( track => (
+          <li className='album-track-li' key={ track.id }>
+            {track.track_number}. { track.name }
             <AudioPlayer
               className='player'
-              src={ item.preview_url }
+              src={ track.preview_url }
               // autoPlay
               controls
             />
@@ -164,8 +165,12 @@ function App() {
       </form>
 
       { album.name && renderAlbum() }
+      {/* when i remove '.name' from 'album.name', nothing below will render either.
+      is this because the component is read top to bottom, so it stops at 166?
+      if so, why does it render the page at all, and not provide an error?
+      otherwise, why does this happen? */}
 
-      { tracks.items &&  renderTracks() }
+      { tracks &&  renderTracks() }
 
       { renderArtists() }
     </div>
