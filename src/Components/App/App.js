@@ -25,14 +25,20 @@ function App() {
     setToken( token );
   }, [] );
 
+  const logout = () => {
+    setToken('');
+    window.localStorage.removeItem( 'token' );
+  }
+
   return (
     <div className="App">
       <header className='app-header'>
-
+        <h1>Spotify React</h1>
+        { !token ?
+          <a href={ authenticationURL }>Login to Spotify</a>
+          : <button onClick={ logout }>Logout</button>
+        }
       </header>
-      <a href={ authenticationURL }>
-        Login to Spotify
-      </a>
     </div>
   );
 }
